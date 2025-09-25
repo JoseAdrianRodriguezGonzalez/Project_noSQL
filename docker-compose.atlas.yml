@@ -1,0 +1,17 @@
+services:
+  backend:
+    build:
+      context: ./practica_1
+      dockerfile: dockerfile
+    container_name: my-backend-container_name
+    restart: always
+    environment:
+      - MONGODB_URI=mongodb+srv://kerpador_db_user:AqTZ58bxJBTCAZs1@cluster0.fdizn2v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0  # <-- conexión directa a Atlas
+    ports:
+      - "3000:3000"
+    networks:
+      - practia-1
+
+networks:
+  practia-1:
+    driver: bridge

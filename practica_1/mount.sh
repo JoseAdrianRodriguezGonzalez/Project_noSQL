@@ -1,0 +1,2 @@
+docker run --rm -d --name base_universidad --network practia_1 -p 27017:27017 -v mongo_db:/data/db -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -e MONGO_INITDB_DATABASE=universidad mongo:6.0       
+docker run --rm -d --name api_universidad --network practia_1 --env-file .env -p 3000:3000 mi-api:latest                                                                          
