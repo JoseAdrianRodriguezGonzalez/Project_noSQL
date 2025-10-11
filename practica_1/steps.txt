@@ -2,22 +2,19 @@ docker volume create mongo_db
 docker network create practia_1
 docker run --rm -d --name base_universidad --network practia_1 -p 27017:27017 -v mongo_db:/data/db -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -e MONGO_INITDB_DATABASE=universidad mongo:6.0       
 docker build -t mi-api .
-docker run --rm -d --name api_universidad --network practia_1 --env-file .env -p 3000:3000 mi-api:latest                                                                                                                                                                    (base)    15:21 
-
-curl -X POST http://localhost:3000/insert \                                                                                                                                                                                                                                 (base)    15:16 
-      -H "Content-Type: application/json" \
+docker run --rm -d --name api_universidad --network practia_1 --env-file .env -p 3000:3000 mi-api:latest                                  
+curl -X POST http://localhost:3000/insert \                                                                                                   -H "Content-Type: application/json" \
       -d '{
     "name": "Santiago Miguel",
     "birthDate": "2000-05-15T00:00:00.000Z",
     "email": "santiago.miguel@gmail.com"
   }'
-curl -X PUT http://localhost:3000/update \                                                                                                                                                                                                                                  (base)    15:20 
-      -H "Content-Type: application/json" \
+curl -X PUT http://localhost:3000/update \                                                                                                    -H "Content-Type: application/json" \
       -d '{
         "filter": { "email": "juan.perez@example.com" },
         "update": { "email": "juan.nuevo@example.com" }
       }'
-curl -X DELETE http://localhost:3000/delete \                                                                                                                                                                                                                               (base)    15:21 
+curl -X DELETE http://localhost:3000/delete \                                                                                           
       -H "Content-Type: application/json" \
       -d '{
         "student": { "email": "juan.nuevo@example.com" }
