@@ -1,0 +1,11 @@
+AL ver las figuras previas, podemos demostrar la utilidad de Redis para delegación de tareas, haciendo más eficiente cada uno de los procesos a realizar.
+
+\Chapter{discusión y conclusión}
+
+Finalmente, vemos que mientras una caché como la B se actualiza, en A si bien, ya también está almacenado pero con otra key dado a la función de preload. Entonces, si queremos ver inmediatamente reflejados los datos que tenemos almacenados, basta con solo acceder a students, ya que en cada update o delete precargará información con está clave. Esto permite que no se tenga que estar accediendo siempre a mongo y la consulta se realiza más rápidamente.
+
+Actualmente los nodos solo fungen como delegadores de trabajo, gracias a nuestros middleware, sin embargo, todavía podrían hacer procesos más avanzados en bases de datos distribuidas. L ejemplo que previamnet ese dió fue el de los workers para la inserción asíncorna de los datos.
+
+Además, se podrían utilizar más tecnologías como redis sentinel. Con él se puede evitar el fallback manual simple que realizamos, que una forma de como lo \textit{preveníamos} era con un acceso aleatorio, sin embargo para evitar hacer esto, redis sentinel hace un análisis de cual nodo debería de utilizar y le ventar a esclado en caso de fallback. Además de que se encarga del balanceo de cargas. Redis clúster nos ayudaría a evitar construir manualmente en el docker compose cada una de las replicas que se crean. Se debe e recordar que se levantan 8 servicios.
+
+El diseño de nuestro backend o el diseño de nuestra red de conexión dependerá mucho de lo que buscamos realizar, que problemas queremos evitar y propiciar a la escabilidad del software. Los patrones de diseño son importantes para este tipo de proyectos y son fundamentales para el diseño y desarrollo de software con buenas prácticas. La teoría revisada en el marco téorico es fundamental y necesaria para saber que algoritmo o patrón se puede implementar y cual podría ayudar para nuestra problemática

@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  #Servicio de mongo 
+  #-------Servicio de mongo ----------
   mongo:
     #Necesito decirle donde esta la imagen
     #el volumen y la red
@@ -15,12 +15,16 @@ services:
       - mongo-data:/data/db
     networks:
       - app-network
-    
+  #------- Servicio de API
   api:
-    build: .
+    build: 
+      context: .
+      dockerfile: dockerfile
     restart: unless-stopped
     depends_on:
       - mongo
+      - redis-master-a
+      - redis-master-b
     ports:
      - "3000:3000"
     environment:
@@ -29,9 +33,75 @@ services:
       MONGO_HOST: mongo
       MONGO_PORT: 27017
       MONGO_DB: ${MONGO_DB:-university}
-
+    # variables de entorno de redis
+      REDIS_MASTER_A_HOST: redis-master-a
+      REDIS_MASTER_A_PORT: 6379
+      REDIS_MASTER_B_HOST: redis-master-b
+      REDIS_MASTER_B_PORT: 6380
     networks:
       - app-network
+    # Redis master lecturas
+  redis-master-a:
+    image: redis:7
+    container_name: redis-master-a
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lfu
+    networks:
+      - app-network
+  # Redis master escrituras
+  redis-master-b:
+    image: redis:7
+    container_name: redis-master-b
+    ports:
+      - "6380:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy volatile-lru
+    networks:
+      - app-network
+  #Esclavos
+  redis-slave-a1:
+    image: redis:7
+    container_name: redis-slave-a1
+    depends_on:
+      - redis-master-a
+    ports:
+      - "6381:6379"
+    command: redis-server --replicaof redis-master-a 6379
+    networks:
+      - app-network
+  redis-slave-a2:
+    image: redis:7
+    container_name: redis-slave-a2
+    depends_on:
+      - redis-master-a
+    ports:
+      - "6382:6379"
+    command: redis-server --replicaof redis-master-a 6379
+    networks:
+      - app-network
+  redis-slave-b1:
+    image: redis:7
+    container_name: redis-slave-b1
+    depends_on:
+      - redis-master-b
+    ports:
+      - "6383:6379"
+    command: redis-server --replicaof redis-master-b 6379
+    networks:
+      - app-network
+  redis-slave-b2:
+    image: redis:7
+    container_name: redis-slave-b2
+    depends_on:
+      - redis-master-b
+    ports:
+      - "6384:6379"
+    command: redis-server --replicaof redis-master-b 6379
+    networks:
+      - app-network
+
+
+
 volumes:
   mongo-data: {}
 networks:
