@@ -1,0 +1,8 @@
+CREATE DATABASE IF NOT EXISTS prueba_db;
+USE prueba_db;
+
+CREATE TABLE users(
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    PRIMARY KEY(id)
+);

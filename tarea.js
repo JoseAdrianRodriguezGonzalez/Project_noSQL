@@ -1,0 +1,131 @@
+//1
+db.employees.aggregate(
+    [
+        {
+
+            $group:{
+                _id:"$departamento",
+                maxEmpleado:{$max:"$salario"},
+                minEmpleado:{$min:"$salario"}
+            }
+        }
+    ]
+)
+
+//2
+db.employees.aggregate(
+    [
+        {
+            $group:{
+                _id:"$departamento",
+                empleados:{$sum:1}
+            }
+        }
+    ]
+)
+//3
+db.employees.aggregate(
+    [
+        {
+            $group:{
+                _id:null,
+                maxSalario:{$sum:"$salario"},
+                avgSalario:{$avg:"$salario"}
+            }
+        }
+    ]
+)
+//4
+db.employees.aggregate(
+    [
+        {
+            $group:{
+                
+                _id:"$departamento",
+                salario:{$avg:"$salario"}
+            }
+        },
+        {
+            $match:{
+                salario:{$gt:35000}
+            }
+        }
+    ]
+)
+//5
+db.employees.find(
+    {departamento:"TI"},
+    {nombre:1},
+)
+//6
+db.employees.aggregate([
+    {
+        $group:{
+            _id:"$departamento",
+            salario_promedio:{$avg:"$salario"}
+        }
+    },
+    {
+        $lookup:{
+            from:"employees",
+            localField:"_id",
+            foreignField:"departamento",
+            as:"empleados"
+        }
+    },
+    { $unwind: "$empleados" },   
+    {
+        $addFields:{
+            diferencia:{
+                $subtract:["$empleados.salario","$salario_promedio"]
+            }
+        }  
+    }
+])
+//7
+db.employees.find()
+    .sort(
+        {
+            salario:-1
+        }
+    )
+    .limit(1)
+    
+//8
+db.employees.aggregate([
+    {
+        $group:{
+            _id:{$substrCP:["$nombre",0,1]},
+            total:{$sum:1}
+        }
+    }
+])
+//9
+db.employees.aggregate([
+    {
+        $group:{
+            _id:"$departamento",
+            total:{$sum:1}
+        }
+    },
+    {
+        $sort:{total:-1}
+    }
+])
+//10
+db.employees.aggregate([
+    {
+        $group:{
+            _id:"$departamento",
+            salario_promedio:{$avg:"$salario"},
+            salario_minimo:{$min:"$salario"},
+            salario_maximo:{$max:"$salario"},
+            total:{$sum:1}
+        }
+    },
+    {
+        $match:{
+            total:{$gte:3}
+        }
+    }
+])

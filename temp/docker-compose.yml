@@ -1,0 +1,43 @@
+services:
+  redis-master:
+    image: redis:7.2-alpine
+    container_name: ${REDIS_MASTER_HOST}
+    hostname: ${REDIS_MASTER_HOST}
+    command: redis-server --appendonly yes
+    ports: 
+      - "6379:6379"
+    networks:
+      - redis-net
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 1s
+      retries: 30
+      timeout: 3s
+  redis-replica-1:
+    image: redis:7.2-alpine
+    container_name: redis-replica-1
+    hostname: redis-replica-1
+    command: redis-server --replicaof ${REDIS_MASTER_HOST} ${REDIS_MASTER_PORT}
+    ports:
+        - "6380:6379"
+    networks:
+      - redis-net
+    depends_on:
+      redis-master:
+        condition: service_healthy
+  redis-replica-2:
+    image: redis:7.2-alpine
+    container_name: redis-replica-2
+    hostname: redis-replica-2
+    command: redis-server --replicaof ${REDIS_MASTER_HOST} ${REDIS_MASTER_PORT}
+    ports:
+        - "6381:6379"
+    networks:
+      - redis-net
+    depends_on:
+      redis-master:
+        condition: service_healthy
+networks:
+  redis-net:
+    driver: bridge
+
