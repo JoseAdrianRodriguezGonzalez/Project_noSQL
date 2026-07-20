@@ -66,6 +66,6 @@ def api_caller(key,municipios_,fechas_):
     print("se termino de insertar")
 if "__main__"==__name__:
     fechas=fechas_list(date(2025,7,1),date.today())
-    api_key="56e8fcb449ad42b0a5234450252210"
+    api_key="lkjlkjljljklklj"
     municipios=["Abasolo","Acámbaro","Apaseo el Alto","Apaseo el Grande","Atarjea","Celaya","Comonfort","Coroneo","Cortazar","Cuerámaro","Doctor Mora","Dolores Hidalgo","Guanajuato","Huanímaro","Irapuato","Jaral del Progreso","Jerécuaro","León","Manuel Doblado","Moroleón","Ocampo","Pénjamo","Pueblo Nuevo","Purísima del Rincón","Romita","Salamanca","Salvatierra","San Diego de la Unión","San Felipe","San Francisco del Rincón","San José Iturbide","San Luis de la Paz","San Miguel de Allende","Santa Catarina","Santa Cruz de Juventino Rosas","Santiago Maravatío","Silao","Tarandacuao","Tarimoro","Tierra Blanca","Uriangato","Valle de Santiago","Victoria","Villagrán","Xichú","Yuriria"]
     api_caller(api_key,municipios,fechas)
