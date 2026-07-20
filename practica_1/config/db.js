@@ -8,7 +8,7 @@ export const connect = async () => {
       const { MONGO_USER, MONGO_PASS, MONGO_HOST, MONGO_PORT, MONGO_DB } = process.env;
       url = `mongodb://${MONGO_USER}:${encodeURIComponent(MONGO_PASS)}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
       await mongoose.connect(url );
-      console.log("LO logrooooo")
+      //console.log("LO logrooooo")
     }else{
         const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
         await mongoose.connect(url, clientOptions);        
